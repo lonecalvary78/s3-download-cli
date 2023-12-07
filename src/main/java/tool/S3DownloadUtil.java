@@ -11,7 +11,7 @@ import java.net.URISyntaxException;
 
 public class S3DownloadUtil {
     private S3Client storageClient;
-    public S3DownloadUtil(URI configFile, String environmentName, String bucketName, String keyPath) throws URISyntaxException, IOException, NoSuchEnvironmentException {
+    public S3DownloadUtil(URI configFile, String environmentName) throws URISyntaxException, IOException, NoSuchEnvironmentException {
         if(environmentName != null && !environmentName.isBlank()) {
             var configuration = ConfigLoader.getInstance().loadFrom(configFile).getEnvironments().stream().filter(environment -> environment.getName().equals(environmentName)).findFirst().orElseThrow(()-> new NoSuchEnvironmentException(environmentName));
             storageClient = StorageUtil.getInstance().newS3Client(configuration.getName(), configuration.getPort(), configuration.isSecured(),configuration.isPathStyle(), configuration.getAccessKey(), configuration.getSecretKey());
