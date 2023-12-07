@@ -45,6 +45,7 @@ public class StorageUtil {
     public void bulkDownload(S3Client client,String bucketName, String keyPath) throws IOException {
         var listObjectRequest = ListObjectsRequest.builder().bucket(bucketName).build();
         var listBucketObjects = client.listObjects(listObjectRequest).contents();
+
         for(S3Object individualObject: listBucketObjects) {
             if(individualObject.key() != null && individualObject.key().contains(keyPath)) {
                 var getObjectRequest = GetObjectRequest.builder().bucket(bucketName).key(individualObject.key()).build();

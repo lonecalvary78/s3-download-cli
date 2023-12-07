@@ -1,0 +1,22 @@
+environments:
+  - name: DEV
+    host: s3.dev
+    port: 9090
+    secured: false
+    pathStyle: true
+    accessKey: s3_dev_id
+    secretKey: dummy
+  - name: QA
+    host: s3.qa
+    port: 9092
+    secured: true
+    pathStyle: true
+    accessKey: s3_qa_id
+    secretKey:  dummy
+  - name: PROD
+    host: s3_prod
+    port: 9094
+    secured: true
+    pathStyle: true
+    accessKey: s3_prod_id
+    secretKey:  dummy
