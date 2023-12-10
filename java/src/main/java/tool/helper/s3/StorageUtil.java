@@ -13,6 +13,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.nio.file.attribute.FileAttribute;
 
 public class StorageUtil {
     private static StorageUtil instance = new StorageUtil();
@@ -44,15 +45,13 @@ public class StorageUtil {
 
     public void bulkDownload(S3Client client,String bucketName, String keyPath) throws IOException {
         var listObjectRequest = ListObjectsRequest.builder().bucket(bucketName).build();
-        var listBucketObjects = client.listObjects(listObjectRequest).contents();
+        var listBucketObjects = client.listObjects(listObjectRequest).contents().stream().filter(s3Object -> s3Object.key().contains(keyPath)).toList();
 
         for(S3Object individualObject: listBucketObjects) {
-            if(individualObject.key() != null && individualObject.key().contains(keyPath)) {
-                var getObjectRequest = GetObjectRequest.builder().bucket(bucketName).key(individualObject.key()).build();
-                var objectContent = client.getObject(getObjectRequest).readAllBytes();
-                if(objectContent.length>0) {
-                    Files.write(Path.of(individualObject.key()),objectContent, StandardOpenOption.CREATE_NEW);
-                }
+            var getObjectRequest = GetObjectRequest.builder().bucket(bucketName).key(individualObject.key()).build();
+            var objectContent = client.getObject(getObjectRequest).readAllBytes();
+            if(objectContent.length>0) {
+                Files.write(Path.of(individualObject.key()),objectContent, StandardOpenOption.CREATE_NEW);
             }
         }
     }

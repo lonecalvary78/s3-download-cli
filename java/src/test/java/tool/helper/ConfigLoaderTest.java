@@ -11,7 +11,7 @@ public class ConfigLoaderTest {
     @ParameterizedTest
     @ValueSource(strings = {"DEV","QA","PROD"})
     public void withPositiveCase(String specificEnvironmentName) throws IOException {
-        var configFile = Path.of("sample/s3-environments.yaml").toUri();
+        var configFile = Path.of("../sample/s3-environments.yaml").toUri();
         Assertions.assertTrue(ConfigLoader.getInstance().loadFrom(configFile).getEnvironments().stream().anyMatch(environment -> environment.getName().equals(specificEnvironmentName)));
     }
 }
